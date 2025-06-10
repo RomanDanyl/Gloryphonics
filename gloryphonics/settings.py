@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "user",
+    "rest_framework_simplejwt",
 ]
 
 MIDDLEWARE = [
@@ -135,4 +137,14 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "gloryphonic@gmail.com"
 EMAIL_HOST_PASSWORD = "jeprntjknqnhfwzb"
 DEFAULT_FROM_EMAIL = "Gloryphonic Site <gloryphonic@gmail.com>"
-# SITE_URL = "https://mixelio.github.io/DAH/#"
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    )
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+}
