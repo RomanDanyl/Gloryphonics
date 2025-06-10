@@ -1,33 +1,60 @@
-from django.core.mail import send_mail
-from django.http import HttpRequest
-from django.shortcuts import render
-from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework import viewsets, mixins
+from rest_framework.permissions import IsAdminUser, AllowAny
+from rest_framework.request import Request
 from rest_framework.response import Response
 
-from gloryphonics import settings
-from user.serializers import RegistrationApplicationSerializer
+from user.emails import send_reject_email, send_approve_email
+from user.models import RegistrationApplication
+from user.serializers import (
+    RegistrationApplicationCreateSerializer,
+    RegistrationApplicationReadSerializer,
+    RegistrationApplicationUpdateSerializer,
+)
 
 
-@api_view(["POST"])
-def create_registration_application(request: HttpRequest) -> Response:
-    serializer = RegistrationApplicationSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    application = serializer.save()
+class RegistrationApplicationViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = RegistrationApplication.objects.all()
+    serializer_class = RegistrationApplicationCreateSerializer
+    http_method_names = ["get", "post", "patch", "head", "options"]
 
-    subject = "New registration application"
-    message = (
-        f"Email: {application.email}\n"
-        f"Name: {application.name}\n"
-        f"File: {application.file.url if application.file else '---'}\n"
-        f"Description: {application.description}"
-    )
-    send_mail(
-        subject,
-        message,
-        settings.EMAIL_HOST_USER,
-        [settings.EMAIL_HOST_USER],
-        fail_silently=False,
-    )
+    def get_permissions(self):
+        if self.action == "create":
+            return [AllowAny()]
 
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return [IsAdminUser()]
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return RegistrationApplicationCreateSerializer
+        if self.action == "partial_update":
+            return RegistrationApplicationUpdateSerializer
+        return RegistrationApplicationReadSerializer
+
+    def partial_update(self, request: Request, *args, **kwargs) -> Response:
+        instance = self.get_object()
+        old_status = instance.status
+
+        response = super().partial_update(request, *args, **kwargs)
+
+        instance.refresh_from_db(fields=["status"])
+        new_status = instance.status
+
+        if old_status != new_status:
+            if new_status == "Approved":
+                send_approve_email(instance)
+            elif new_status == "Rejected":
+                send_reject_email(instance)
+
+        return response
+
+    def perform_create(
+        self, serializer: RegistrationApplicationCreateSerializer
+    ) -> None:
+        application = serializer.save()
+        send_approve_email(application)
