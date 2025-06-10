@@ -46,8 +46,6 @@ class RegistrationApplicationUpdateSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    photo_url = serializers.SerializerMethodField()
-
     class Meta:
         model = get_user_model()
         fields = (
@@ -58,6 +56,7 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "avatar",
+            "country",
             "description",
             "slogan",
         )

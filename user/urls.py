@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from user.views import RegistrationApplicationViewSet, CreateUserView
+from user.views import RegistrationApplicationViewSet, CreateUserView, ManageUserView
 
 app_name = "user"
 
@@ -11,4 +11,5 @@ router.register("applications", RegistrationApplicationViewSet, basename="applic
 urlpatterns = [
     path("register/", CreateUserView.as_view(), name="create_user"),
     path("", include(router.urls)),
+    path("me/", ManageUserView.as_view(), name="manage"),
 ]

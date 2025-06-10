@@ -1,5 +1,6 @@
+from django.contrib.auth import get_user_model
 from rest_framework import viewsets, mixins, generics
-from rest_framework.permissions import IsAdminUser, AllowAny
+from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -10,6 +11,7 @@ from user.serializers import (
     RegistrationApplicationReadSerializer,
     RegistrationApplicationUpdateSerializer,
     CreateUserSerializer,
+    UserSerializer,
 )
 
 
@@ -63,3 +65,11 @@ class RegistrationApplicationViewSet(
 
 class CreateUserView(generics.CreateAPIView):
     serializer_class = CreateUserSerializer
+
+
+class ManageUserView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self) -> get_user_model():
+        return self.request.user

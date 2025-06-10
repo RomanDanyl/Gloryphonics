@@ -10,7 +10,9 @@ from user.utills import (
 
 class User(AbstractUser):
     country = models.CharField(max_length=100)
-    avatar = models.ImageField(upload_to=avatar_upload_path, blank=True, null=True)
+    avatar = models.ImageField(
+        upload_to=avatar_upload_path, max_length=355, blank=True, null=True
+    )
     description = models.TextField(blank=True, null=True)
     slogan = models.TextField(blank=True, null=True)
 
