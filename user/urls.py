@@ -1,13 +1,13 @@
-from django.urls import path
-from user.views import create_registration_application
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
+from user.views import RegistrationApplicationViewSet
 
 app_name = "user"
 
+router = DefaultRouter()
+router.register("applications", RegistrationApplicationViewSet, basename="applications")
+
 urlpatterns = [
-    path(
-        "applications/create/",
-        create_registration_application,
-        name="application-create",
-    ),
+    path("", include(router.urls)),
 ]
