@@ -1,4 +1,4 @@
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, generics
 from rest_framework.permissions import IsAdminUser, AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -9,6 +9,7 @@ from user.serializers import (
     RegistrationApplicationCreateSerializer,
     RegistrationApplicationReadSerializer,
     RegistrationApplicationUpdateSerializer,
+    CreateUserSerializer,
 )
 
 
@@ -58,3 +59,7 @@ class RegistrationApplicationViewSet(
     ) -> None:
         application = serializer.save()
         send_approve_email(application)
+
+
+class CreateUserView(generics.CreateAPIView):
+    serializer_class = CreateUserSerializer
