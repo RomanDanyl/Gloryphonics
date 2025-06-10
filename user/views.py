@@ -1,17 +1,21 @@
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, mixins, generics
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
 from user.emails import send_reject_email, send_approve_email
-from user.models import RegistrationApplication
+from user.models import RegistrationApplication, UserImage, User
+from user.permissions import IsOwnerOrAdminOrReadOnly
 from user.serializers import (
     RegistrationApplicationCreateSerializer,
     RegistrationApplicationReadSerializer,
     RegistrationApplicationUpdateSerializer,
     CreateUserSerializer,
     UserSerializer,
+    UserImageCreateSerializer,
+    UserImageReadSerializer,
 )
 
 
@@ -73,3 +77,31 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
 
     def get_object(self) -> get_user_model():
         return self.request.user
+
+
+class UserImageListCreateView(generics.ListCreateAPIView):
+    serializer_class = UserImageCreateSerializer
+    permission_classes = (IsOwnerOrAdminOrReadOnly,)
+
+    def get_queryset(self):
+        user_id = self.kwargs["user_id"]
+        return UserImage.objects.filter(user_id=user_id).select_related("user")
+
+    def perform_create(self, serializer):
+        user_id = self.kwargs["user_id"]
+        user = get_object_or_404(User, pk=user_id)
+        serializer.save(user=user)
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return UserImageReadSerializer
+        return UserImageCreateSerializer
+
+
+class UserImageRetrieveDestroyView(generics.RetrieveDestroyAPIView):
+    serializer_class = UserImageReadSerializer
+    permission_classes = (IsOwnerOrAdminOrReadOnly,)
+
+    def get_queryset(self):
+        user_id = self.kwargs["user_id"]
+        return UserImage.objects.filter(user_id=user_id)

@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import UploadedFile
 from rest_framework import serializers
 
-from user.models import RegistrationApplication
+from user.models import RegistrationApplication, UserImage
 
 
 class RegistrationApplicationCreateSerializer(serializers.ModelSerializer):
@@ -100,3 +100,15 @@ class CreateUserSerializer(UserSerializer):
                 "style": {"input_type": "password"},
             }
         }
+
+
+class UserImageCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserImage
+        fields = ["image"]
+
+
+class UserImageReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserImage
+        fields = ["id", "user", "image"]
