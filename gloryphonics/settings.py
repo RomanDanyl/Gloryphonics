@@ -168,9 +168,9 @@ STORAGES = {
         "OPTIONS": {
             "bucket_name": "gloryphonic",
             "region_name": "eu-central-1",
-            "default_acl": None,  # або "public-read", якщо треба публічні
-            "querystring_auth": False,  # Генеруються відкриті URL без підпису
-            "file_overwrite": False,  # Щоб не перезаписувати файли з однаковим ім’ям
+            "default_acl": None,
+            "querystring_auth": False,
+            "file_overwrite": False,
         },
     },
     "staticfiles": {
