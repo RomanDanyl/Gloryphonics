@@ -46,13 +46,15 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "storages",
-    "user",
     "rest_framework_simplejwt",
+    "corsheaders",
+    "user",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -181,3 +183,8 @@ STORAGES = {
 
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "https://v0-gloryphonic-1ywfa50pl-mykhailo-hubkos-projects.vercel.app",
+]
