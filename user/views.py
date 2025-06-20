@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from user.emails import send_reject_email, send_approve_email
+from user.emails import send_reject_email, send_approve_email, send_create_email
 from user.models import RegistrationApplication, UserImage, User
 from user.permissions import IsOwnerOrAdminOrReadOnly
 from user.serializers import (
@@ -64,7 +64,7 @@ class RegistrationApplicationViewSet(
         self, serializer: RegistrationApplicationCreateSerializer
     ) -> None:
         application = serializer.save()
-        send_approve_email(application)
+        send_create_email(application)
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -101,6 +101,7 @@ class UserImageListCreateView(generics.ListCreateAPIView):
 class UserImageRetrieveDestroyView(generics.RetrieveDestroyAPIView):
     serializer_class = UserImageReadSerializer
     permission_classes = (IsOwnerOrAdminOrReadOnly,)
+    lookup_url_kwarg = "image_id"
 
     def get_queryset(self):
         user_id = self.kwargs["user_id"]

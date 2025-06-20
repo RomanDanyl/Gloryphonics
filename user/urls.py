@@ -24,7 +24,7 @@ urlpatterns = [
         name="user-images-list-create",
     ),
     path(
-        "<int:user_id>/images/<int:pk>/",
+        "<int:user_id>/images/<int:image_id>/",
         UserImageRetrieveDestroyView.as_view(),
         name="user-image-detail",
     ),
