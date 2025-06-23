@@ -13,5 +13,5 @@ COPY . .
 CMD ["sh", "-c", "python manage.py makemigrations && \
                   python manage.py migrate && \
                   python manage.py collectstatic --noinput && \
-                  python manage.py runserver 0.0.0.0:8000"]
-#    gunicorn -b 0.0.0.0:8080 backend.wsgi:application
+                  gunicorn -b 0.0.0.0:8080 gloryphonics.wsgi:application"]
+#    gunicorn -b 0.0.0.0:8080 gloryphonics.wsgi:application
