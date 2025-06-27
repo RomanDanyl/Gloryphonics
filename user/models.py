@@ -5,6 +5,7 @@ from user.utills import (
     avatar_upload_path,
     user_image_upload_path,
     registration_file_upload_path,
+    album_cover_upload_path,
 )
 
 
@@ -42,3 +43,13 @@ class RegistrationApplication(models.Model):
 
     def __str__(self) -> str:
         return f"Application from {self.name}, email - {self.email}"
+
+
+class Album(models.Model):
+    artist = models.ForeignKey(User, on_delete=models.CASCADE, related_name="albums")
+    title = models.CharField(max_length=255)
+    release_date = models.DateField()
+    cover_image = models.ImageField(upload_to=album_cover_upload_path)
+
+    def __str__(self):
+        return self.title
