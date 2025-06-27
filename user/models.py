@@ -53,3 +53,14 @@ class Album(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Follower(models.Model):
+    name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    followed_artists = models.ManyToManyField(
+        User, related_name="followers", blank=True, null=True
+    )
+
+    def __str__(self):
+        return f"{self.name} <{self.email}>"
