@@ -75,3 +75,16 @@ def registration_file_upload_path(instance: Any, filename: str) -> str:
     username = instance.name if instance.name else "unknown"
     filename = f"{slugify(username)}-{uuid.uuid4()}{pathlib.Path(filename).suffix}"
     return os.path.join("upload", "files", filename)
+
+
+def album_cover_upload_path(instance: Any, filename: str) -> str:
+    """
+    Generate upload path for album cover images.
+
+    Files will be saved to: albums/<artist_id>/<slugified-title>-<uuid>.<ext>
+    """
+    artist_id = instance.artist.id if instance.artist else "unknown"
+    title_slug = slugify(instance.title) or "untitled"
+    ext = pathlib.Path(filename).suffix
+    new_filename = f"{title_slug}-{uuid.uuid4()}{ext}"
+    return os.path.join("albums", str(artist_id), new_filename)
