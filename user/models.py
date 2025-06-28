@@ -59,7 +59,9 @@ class Follower(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     followed_artists = models.ManyToManyField(
-        User, related_name="followers", blank=True, null=True
+        User,
+        related_name="followers",
+        blank=True,
     )
 
     def __str__(self):

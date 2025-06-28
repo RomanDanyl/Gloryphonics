@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import UploadedFile
 from rest_framework import serializers
 
-from user.models import RegistrationApplication, UserImage
+from user.models import RegistrationApplication, UserImage, Album
 
 
 class RegistrationApplicationCreateSerializer(serializers.ModelSerializer):
@@ -43,6 +43,18 @@ class RegistrationApplicationUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegistrationApplication
         fields = ["status"]
+
+
+class AlbumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Album
+        fields = (
+            "id",
+            "artist",
+            "title",
+            "release_date",
+            "cover_image",
+        )
 
 
 class UserSerializer(serializers.ModelSerializer):
