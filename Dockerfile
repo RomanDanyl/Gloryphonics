@@ -10,8 +10,8 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["sh", "-c", "python manage.py makemigrations && \
-                  python manage.py migrate && \
+CMD ["sh", "-c", "python manage.py migrate && \
                   python manage.py collectstatic --noinput && \
                   gunicorn -b 0.0.0.0:8080 gloryphonics.wsgi:application"]
 #    gunicorn -b 0.0.0.0:8080 gloryphonics.wsgi:application
+#   python manage.py makemigrations && \
