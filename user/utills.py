@@ -87,4 +87,4 @@ def album_cover_upload_path(instance: Any, filename: str) -> str:
     title_slug = slugify(instance.title) or "untitled"
     ext = pathlib.Path(filename).suffix
     new_filename = f"{title_slug}-{uuid.uuid4()}{ext}"
-    return os.path.join("albums", str(artist_id), new_filename)
+    return os.path.join("upload", "albums", str(artist_id), new_filename)
