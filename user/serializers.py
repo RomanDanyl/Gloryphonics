@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import UploadedFile
 from rest_framework import serializers
 
-from user.models import RegistrationApplication, UserImage, Album
+from user.models import RegistrationApplication, UserImage, Album, Follower
 
 
 class RegistrationApplicationCreateSerializer(serializers.ModelSerializer):
@@ -50,27 +50,41 @@ class AlbumSerializer(serializers.ModelSerializer):
         model = Album
         fields = (
             "id",
-            "artist",
             "title",
             "release_date",
             "cover_image",
         )
 
 
+class FollowerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Follower
+        fields = ("id", "name", "email")
+
+
 class UserSerializer(serializers.ModelSerializer):
+    albums = AlbumSerializer(many=True, read_only=True)
+    followers = FollowerSerializer(many=True, read_only=True)
+
     class Meta:
         model = get_user_model()
         fields = (
             "id",
             "username",
             "email",
-            "is_staff",
             "first_name",
             "last_name",
             "avatar",
             "country",
             "description",
             "slogan",
+            "facebook",
+            "instagram",
+            "youtube",
+            "spotify",
+            "youtube_music",
+            "albums",
+            "followers",
         )
         read_only_fields = ("is_staff",)
 
