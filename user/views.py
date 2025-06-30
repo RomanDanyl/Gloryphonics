@@ -71,7 +71,7 @@ class CreateUserView(generics.CreateAPIView):
     serializer_class = CreateUserSerializer
 
 
-class ManageUserView(generics.RetrieveUpdateAPIView):
+class ManageUserView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -106,3 +106,7 @@ class UserImageRetrieveDestroyView(generics.RetrieveDestroyAPIView):
     def get_queryset(self):
         user_id = self.kwargs["user_id"]
         return UserImage.objects.filter(user_id=user_id)
+
+
+class UserListRetrieveView(viewsets.ReadOnlyModelViewSet):
+    pass
