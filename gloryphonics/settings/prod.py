@@ -6,6 +6,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "18.197.239.62", "gloryphonic-api.ddns.net"]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://gloryphonic-api.ddns.net",
+]
+
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
