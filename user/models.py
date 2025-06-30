@@ -16,6 +16,11 @@ class User(AbstractUser):
     )
     description = models.TextField(blank=True, null=True)
     slogan = models.TextField(blank=True, null=True)
+    facebook = models.URLField(blank=True, null=True)
+    instagram = models.URLField(blank=True, null=True)
+    youtube = models.URLField(blank=True, null=True)
+    spotify = models.URLField(blank=True, null=True)
+    youtube_music = models.URLField(blank=True, null=True)
 
 
 class UserImage(models.Model):
