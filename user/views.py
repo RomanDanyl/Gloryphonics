@@ -109,4 +109,6 @@ class UserImageRetrieveDestroyView(generics.RetrieveDestroyAPIView):
 
 
 class UserListRetrieveView(viewsets.ReadOnlyModelViewSet):
-    pass
+    serializer_class = UserSerializer
+    permission_classes = (AllowAny,)
+    queryset = User.objects.all().prefetch_related("albums", "followers")
