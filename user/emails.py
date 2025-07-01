@@ -1,7 +1,10 @@
+from datetime import timedelta
+
 from django.core.mail import send_mail
+from django.utils import timezone
 
 from gloryphonics import settings
-from user.models import RegistrationApplication
+from user.models import RegistrationApplication, RegistrationToken
 
 
 def send_reject_email(application: RegistrationApplication) -> None:
@@ -23,7 +26,23 @@ def send_reject_email(application: RegistrationApplication) -> None:
 
 
 def send_approve_email(application: RegistrationApplication) -> None:
-    print(f"Sending approve email for {application.name}")
+    token = RegistrationToken.objects.create(
+        application=application, expires_at=timezone.now() + timedelta(days=7)
+    )
+
+    link = f"https://frontend-site.com/complete-registration/?token={token.token}"
+
+    send_mail(
+        subject="Your application has been approved",
+        message=(
+            f"Congratulations!\n\n"
+            f"Your application has been approved. "
+            f"Please complete your registration by visiting the following link:\n\n{link}\n\n"
+            f"The link is valid for one week"
+        ),
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[application.email],
+    )
 
 
 def send_create_email(application: RegistrationApplication) -> None:
