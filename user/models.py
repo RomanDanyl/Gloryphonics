@@ -16,11 +16,6 @@ class User(AbstractUser):
     )
     description = models.TextField(blank=True, null=True)
     slogan = models.TextField(blank=True, null=True)
-    facebook = models.URLField(blank=True, null=True)
-    instagram = models.URLField(blank=True, null=True)
-    youtube = models.URLField(blank=True, null=True)
-    spotify = models.URLField(blank=True, null=True)
-    youtube_music = models.URLField(blank=True, null=True)
 
 
 class UserImage(models.Model):
@@ -71,3 +66,17 @@ class Follower(models.Model):
 
     def __str__(self):
         return f"{self.name} <{self.email}>"
+
+
+class SocialLinks(models.Model):
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="social_links"
+    )
+    facebook = models.URLField(blank=True, null=True)
+    instagram = models.URLField(blank=True, null=True)
+    youtube = models.URLField(blank=True, null=True)
+    spotify = models.URLField(blank=True, null=True)
+    youtube_music = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Social links for {self.user.username}"
