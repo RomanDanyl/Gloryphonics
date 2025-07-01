@@ -8,13 +8,14 @@ from user.views import (
     UserImageListCreateView,
     UserImageRetrieveDestroyView,
     UserListRetrieveView,
+    CompleteRegistrationView,
 )
 
 app_name = "user"
 
 router = DefaultRouter()
 router.register("applications", RegistrationApplicationViewSet, basename="applications")
-router.register("", UserListRetrieveView, basename="users")
+router.register("artists", UserListRetrieveView, basename="users")
 
 urlpatterns = [
     path("register/", CreateUserView.as_view(), name="create-user"),
@@ -30,5 +31,9 @@ urlpatterns = [
         UserImageRetrieveDestroyView.as_view(),
         name="user-image-detail",
     ),
-    # path("", UserListRetrieveView.as_view(), name="user-list-retrieve"),
+    path(
+        "complete-registration/",
+        CompleteRegistrationView.as_view(),
+        name="complete-registration",
+    ),
 ]
