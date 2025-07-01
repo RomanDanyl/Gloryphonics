@@ -7,12 +7,14 @@ from user.views import (
     ManageUserView,
     UserImageListCreateView,
     UserImageRetrieveDestroyView,
+    UserListRetrieveView,
 )
 
 app_name = "user"
 
 router = DefaultRouter()
 router.register("applications", RegistrationApplicationViewSet, basename="applications")
+router.register("", UserListRetrieveView, basename="users")
 
 urlpatterns = [
     path("register/", CreateUserView.as_view(), name="create-user"),
@@ -28,4 +30,5 @@ urlpatterns = [
         UserImageRetrieveDestroyView.as_view(),
         name="user-image-detail",
     ),
+    # path("", UserListRetrieveView.as_view(), name="user-list-retrieve"),
 ]
