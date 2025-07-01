@@ -1,21 +1,24 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, mixins, generics
+from rest_framework import viewsets, mixins, generics, status
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from user.emails import send_reject_email, send_approve_email, send_create_email
-from user.models import RegistrationApplication, UserImage, User
+from user.models import RegistrationApplication, UserImage, User, RegistrationToken
 from user.permissions import IsOwnerOrAdminOrReadOnly
 from user.serializers import (
     RegistrationApplicationCreateSerializer,
     RegistrationApplicationReadSerializer,
     RegistrationApplicationUpdateSerializer,
     CreateUserSerializer,
-    UserSerializer,
+    UserListSerializer,
     UserImageCreateSerializer,
     UserImageReadSerializer,
+    UserRetrieveSerializer,
+    CompleteRegistrationSerializer,
 )
 
 
@@ -67,12 +70,51 @@ class RegistrationApplicationViewSet(
         send_create_email(application)
 
 
+class CompleteRegistrationView(APIView):
+    def post(self, request):
+        serializer = CompleteRegistrationSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        token_str = serializer.validated_data["token"]
+        password = serializer.validated_data["password"]
+
+        try:
+            token = RegistrationToken.objects.select_related("application").get(
+                token=token_str
+            )
+        except RegistrationToken.DoesNotExist:
+            return Response(
+                {"detail": "Invalid or expired token."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not token.is_valid():
+            return Response(
+                {"detail": "This token has expired."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        app = token.application
+
+        user = get_user_model().objects.create_user(
+            username=app.name,
+            email=app.email,
+            description=app.description,
+            country=app.country,
+            password=password,
+        )
+
+        token.delete()
+
+        return Response(CreateUserSerializer(user).data, status=status.HTTP_201_CREATED)
+
+
 class CreateUserView(generics.CreateAPIView):
     serializer_class = CreateUserSerializer
 
 
 class ManageUserView(generics.RetrieveAPIView):
-    serializer_class = UserSerializer
+    serializer_class = UserListSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_object(self) -> get_user_model():
@@ -109,6 +151,15 @@ class UserImageRetrieveDestroyView(generics.RetrieveDestroyAPIView):
 
 
 class UserListRetrieveView(viewsets.ReadOnlyModelViewSet):
-    serializer_class = UserSerializer
+    serializer_class = UserListSerializer
     permission_classes = (AllowAny,)
-    queryset = User.objects.all().prefetch_related("albums", "followers")
+    queryset = (
+        User.objects.all()
+        .select_related("social_links")
+        .prefetch_related("albums", "followers")
+    )
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return UserRetrieveSerializer
+        return UserListSerializer
