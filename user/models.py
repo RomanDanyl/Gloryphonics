@@ -1,5 +1,8 @@
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 from user.utills import (
     avatar_upload_path,
@@ -26,6 +29,18 @@ class UserImage(models.Model):
         return f"Image from user {self.user.username}"
 
 
+class RegistrationToken(models.Model):
+    token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    application = models.OneToOneField(
+        "RegistrationApplication", on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+
+    def is_valid(self) -> bool:
+        return timezone.now() < self.expires_at
+
+
 class RegistrationApplication(models.Model):
     class StatusChoices(models.TextChoices):
         PENDING = "Pending"
@@ -34,6 +49,7 @@ class RegistrationApplication(models.Model):
 
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
     file = models.FileField(upload_to=registration_file_upload_path, max_length=355)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
