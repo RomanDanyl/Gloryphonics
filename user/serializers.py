@@ -4,13 +4,38 @@ from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import UploadedFile
 from rest_framework import serializers
 
-from user.models import RegistrationApplication, UserImage, Album, Follower, SocialLinks
+from user.models import (
+    RegistrationApplication,
+    UserImage,
+    Album,
+    Follower,
+    SocialLinks,
+    RegistrationToken,
+)
+
+
+class CompleteRegistrationSerializer(serializers.Serializer):
+    token = serializers.UUIDField()
+    password = serializers.CharField(min_length=8, write_only=True)
+
+    def validate_token(self, value: str) -> Optional[str]:
+        try:
+            token = RegistrationToken.objects.select_related("application").get(
+                token=value
+            )
+        except RegistrationToken.DoesNotExist:
+            raise serializers.ValidationError("Invalid token.")
+
+        if not token.is_valid():
+            raise serializers.ValidationError("Token has expired.")
+
+        return value
 
 
 class RegistrationApplicationCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegistrationApplication
-        fields = ["email", "name", "file", "description"]
+        fields = ["email", "name", "country", "file", "description"]
 
     def validate_file(self, value: UploadedFile) -> Optional[UploadedFile]:
         """
@@ -36,7 +61,16 @@ class RegistrationApplicationCreateSerializer(serializers.ModelSerializer):
 class RegistrationApplicationReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegistrationApplication
-        fields = ["id", "email", "name", "file", "description", "status", "created_at"]
+        fields = [
+            "id",
+            "email",
+            "name",
+            "country",
+            "file",
+            "description",
+            "status",
+            "created_at",
+        ]
 
 
 class RegistrationApplicationUpdateSerializer(serializers.ModelSerializer):
@@ -68,7 +102,7 @@ class SocialLinksSerializer(serializers.ModelSerializer):
         fields = ("facebook", "instagram", "youtube", "spotify", "youtube_music")
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserListSerializer(serializers.ModelSerializer):
     albums = AlbumSerializer(many=True, read_only=True)
     followers = FollowerSerializer(many=True, read_only=True)
     social_links = SocialLinksSerializer(read_only=True)
@@ -79,8 +113,6 @@ class UserSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "email",
-            "first_name",
-            "last_name",
             "avatar",
             "country",
             "description",
@@ -89,7 +121,6 @@ class UserSerializer(serializers.ModelSerializer):
             "albums",
             "followers",
         )
-        read_only_fields = ("is_staff",)
 
     def create(self, validated_data: dict) -> get_user_model():
         """Create a new users with encrypted password and return it"""
@@ -108,15 +139,13 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class CreateUserSerializer(UserSerializer):
+class CreateUserSerializer(UserListSerializer):
     class Meta:
         model = get_user_model()
         fields = (
             "username",
             "email",
             "password",
-            "first_name",
-            "last_name",
             "country",
             "avatar",
             "description",
@@ -141,3 +170,23 @@ class UserImageReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserImage
         fields = ["id", "user", "image"]
+
+
+class UserRetrieveSerializer(UserListSerializer):
+    images = UserImageReadSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = get_user_model()
+        fields = (
+            "id",
+            "username",
+            "email",
+            "avatar",
+            "country",
+            "description",
+            "slogan",
+            "social_links",
+            "albums",
+            "followers",
+            "images",
+        )
