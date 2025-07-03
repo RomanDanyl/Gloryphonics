@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 
-from user.utills import (
+from user.utils import (
     avatar_upload_path,
     user_image_upload_path,
     registration_file_upload_path,

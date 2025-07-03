@@ -4,7 +4,7 @@ import django.contrib.auth.models
 import django.contrib.auth.validators
 import django.db.models.deletion
 import django.utils.timezone
-import user.utills
+import user.utils
 from django.conf import settings
 from django.db import migrations, models
 
