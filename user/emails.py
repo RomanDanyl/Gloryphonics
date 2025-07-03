@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.utils import timezone
 
@@ -55,4 +56,13 @@ def send_create_email(application: RegistrationApplication) -> None:
         settings.EMAIL_HOST_USER,
         [settings.EMAIL_HOST_USER],
         fail_silently=False,
+    )
+
+
+def send_password_reset_email(user: get_user_model(), reset_url: str) -> None:
+    send_mail(
+        subject="Password Reset Request",
+        message=f"Click the link below to reset your password:\n{reset_url}",
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[user.email],
     )
