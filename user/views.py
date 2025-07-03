@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from rest_framework import viewsets, mixins, generics, status
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.request import Request
@@ -56,9 +59,12 @@ class RegistrationApplicationViewSet(
         new_status = instance.status
 
         if old_status != new_status:
-            if new_status == "Approved":
-                send_approve_email(instance)
-            elif new_status == "Rejected":
+            if new_status == RegistrationApplication.StatusChoices.APPROVED:
+                token = RegistrationToken.objects.create(
+                    application=instance, expires_at=timezone.now() + timedelta(days=7)
+                )
+                send_approve_email(instance, token.token)
+            elif new_status == RegistrationApplication.StatusChoices.REJECTED:
                 send_reject_email(instance)
 
         return response
@@ -75,36 +81,19 @@ class CompleteRegistrationView(APIView):
         serializer = CompleteRegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        token_str = serializer.validated_data["token"]
         password = serializer.validated_data["password"]
-
-        try:
-            token = RegistrationToken.objects.select_related("application").get(
-                token=token_str
-            )
-        except RegistrationToken.DoesNotExist:
-            return Response(
-                {"detail": "Invalid or expired token."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if not token.is_valid():
-            return Response(
-                {"detail": "This token has expired."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        app = token.application
+        application = serializer.validated_data["application"]
+        token_obj = serializer.validated_data["token_obj"]
 
         user = get_user_model().objects.create_user(
-            username=app.name,
-            email=app.email,
-            description=app.description,
-            country=app.country,
+            username=application.name,
+            email=application.email,
+            description=application.description,
+            country=application.country,
             password=password,
         )
 
-        token.delete()
+        token_obj.delete()
 
         return Response(CreateUserSerializer(user).data, status=status.HTTP_201_CREATED)
 

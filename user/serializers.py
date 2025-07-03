@@ -18,18 +18,29 @@ class CompleteRegistrationSerializer(serializers.Serializer):
     token = serializers.UUIDField()
     password = serializers.CharField(min_length=8, write_only=True)
 
-    def validate_token(self, value: str) -> Optional[str]:
+    def validate_token(self, value: str) -> str:
         try:
-            token = RegistrationToken.objects.select_related("application").get(
+            token_obj = RegistrationToken.objects.select_related("application").get(
                 token=value
             )
         except RegistrationToken.DoesNotExist:
             raise serializers.ValidationError("Invalid token.")
 
-        if not token.is_valid():
+        if not token_obj.is_valid():
             raise serializers.ValidationError("Token has expired.")
 
+        self.context["token_obj"] = token_obj
+
         return value
+
+    def validate(self, attrs):
+        token_obj = self.context.get("token_obj")
+        if not token_obj:
+            raise serializers.ValidationError("Token validation failed.")
+
+        attrs["application"] = token_obj.application
+        attrs["token_obj"] = token_obj
+        return attrs
 
 
 class RegistrationApplicationCreateSerializer(serializers.ModelSerializer):
