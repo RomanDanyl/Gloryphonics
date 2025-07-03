@@ -6,19 +6,6 @@ from typing import Callable, Any
 from django.utils.text import slugify
 
 
-def path_factory(folder_name: str) -> Callable[[Any, str], str]:
-    def path(instance, filename: str) -> str:
-        username = (
-            instance.user.username
-            if hasattr(instance, "user") and instance.user
-            else (instance.username if hasattr(instance, "username") else "unknown")
-        )
-        filename = f"{slugify(username)}-{uuid.uuid4()}" + pathlib.Path(filename).suffix
-        return os.path.join("upload", folder_name, filename)
-
-    return path
-
-
 def avatar_upload_path(instance: Any, filename: str) -> str:
     """
     Generate a file path for uploading a user's avatar.
