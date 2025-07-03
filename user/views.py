@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, mixins, generics, status
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.request import Request
@@ -89,6 +90,10 @@ class RegistrationApplicationViewSet(
 
 
 class CompleteRegistrationView(APIView):
+    @extend_schema(
+        request=CompleteRegistrationSerializer,
+        responses={200: CreateUserSerializer},
+    )
     def post(self, request):
         serializer = CompleteRegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -115,6 +120,10 @@ class PasswordResetRequestView(APIView):
     View to handle password reset email requests.
     """
 
+    @extend_schema(
+        request=PasswordResetRequestSerializer,
+        responses={200: PasswordResetRequestResponseSerializer},
+    )
     def post(self, request):
         serializer = PasswordResetRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -142,6 +151,10 @@ class PasswordResetConfirmView(APIView):
     View to handle password reset confirmation.
     """
 
+    @extend_schema(
+        request=PasswordResetConfirmSerializer,
+        responses={200: PasswordResetConfirmResponseSerializer},
+    )
     def post(self, request):
         serializer = PasswordResetConfirmSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
