@@ -9,6 +9,8 @@ from user.views import (
     UserImageRetrieveDestroyView,
     UserListRetrieveView,
     CompleteRegistrationView,
+    PasswordResetRequestView,
+    PasswordResetConfirmView,
 )
 
 app_name = "user"
@@ -35,5 +37,15 @@ urlpatterns = [
         "complete-registration/",
         CompleteRegistrationView.as_view(),
         name="complete-registration",
+    ),
+    path(
+        "password-reset/",
+        PasswordResetRequestView.as_view(),
+        name="password_reset",
+    ),
+    path(
+        "password-reset-confirm/",
+        PasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
     ),
 ]
