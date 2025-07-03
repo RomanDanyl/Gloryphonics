@@ -1,7 +1,9 @@
 from typing import Optional
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.files.uploadedfile import UploadedFile
+from django.utils.http import urlsafe_base64_decode
 from rest_framework import serializers
 
 from user.models import (
@@ -88,6 +90,51 @@ class RegistrationApplicationUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegistrationApplication
         fields = ["status"]
+
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    return_url = serializers.URLField()
+
+    def validate_email(self, value):
+        if not get_user_model().objects.filter(email=value).exists():
+            raise serializers.ValidationError("User with this email does not exist")
+        return value
+
+
+class PasswordResetRequestResponseSerializer(serializers.Serializer):
+    message = serializers.CharField()
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    uidb64 = serializers.CharField()
+    token = serializers.CharField()
+    password = serializers.CharField(min_length=5, write_only=True)
+
+    def validate_password(self, value) -> Optional[str]:
+        if len(value) < 5:
+            raise serializers.ValidationError(
+                "Password must be at least 5 characters long"
+            )
+        return value
+
+    def validate(self, attrs) -> Optional[dict]:
+        try:
+            uid = urlsafe_base64_decode(attrs["uidb64"]).decode()
+            user = get_user_model().objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
+            raise serializers.ValidationError("Invalid UID or user")
+
+        token_generator = PasswordResetTokenGenerator()
+        if not token_generator.check_token(user, attrs["token"]):
+            raise serializers.ValidationError("Invalid or expired token")
+
+        attrs["user"] = user
+        return attrs
+
+
+class PasswordResetConfirmResponseSerializer(serializers.Serializer):
+    message = serializers.CharField()
 
 
 class AlbumSerializer(serializers.ModelSerializer):
