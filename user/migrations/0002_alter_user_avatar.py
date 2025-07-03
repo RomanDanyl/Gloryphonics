@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 blank=True,
                 max_length=355,
                 null=True,
-                upload_to=user.utills.avatar_upload_path,
+                upload_to=user.utils.avatar_upload_path,
             ),
         ),
     ]

@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ("release_date", models.DateField()),
                 (
                     "cover_image",
-                    models.ImageField(upload_to=user.utills.album_cover_upload_path),
+                    models.ImageField(upload_to=user.utils.album_cover_upload_path),
                 ),
                 (
                     "artist",

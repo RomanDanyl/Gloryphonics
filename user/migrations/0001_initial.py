@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                     "file",
                     models.FileField(
                         max_length=355,
-                        upload_to=user.utills.registration_file_upload_path,
+                        upload_to=user.utils.registration_file_upload_path,
                     ),
                 ),
                 ("description", models.TextField()),
@@ -141,7 +141,7 @@ class Migration(migrations.Migration):
                 (
                     "avatar",
                     models.ImageField(
-                        blank=True, null=True, upload_to=user.utills.avatar_upload_path
+                        blank=True, null=True, upload_to=user.utils.avatar_upload_path
                     ),
                 ),
                 ("description", models.TextField(blank=True, null=True)),
@@ -192,7 +192,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "image",
-                    models.ImageField(upload_to=user.utills.user_image_upload_path),
+                    models.ImageField(upload_to=user.utils.user_image_upload_path),
                 ),
                 (
                     "user",
