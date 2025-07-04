@@ -8,7 +8,7 @@ services:
       - "8080"
     volumes:
       - static_volume:/app/staticfiles
-      - ./tmp:/tmp
+      - tmp_volume:/tmp
     env_file:
       - .env
 
@@ -32,15 +32,18 @@ services:
     volumes:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/www/certbot
+      - /var/run/docker.sock:/var/run/docker.sock
     entrypoint: "/bin/sh -c '
-      certbot certonly --webroot --webroot-path=/var/www/certbot \
-      --email gloryphonic@gmail.com \
-      --agree-tos \
-      --no-eff-email \
-      -d gloryphonic-api.ddns.net
+      trap exit TERM;
+      while :; do
+        certbot renew --webroot --webroot-path=/var/www/certbot --quiet && \
+        docker exec gloryphonic_nginx nginx -s reload;
+        sleep 12h;
+      done
     '"
 
 volumes:
   static_volume:
   certbot-etc:
   certbot-var:
+  tmp_volume:
