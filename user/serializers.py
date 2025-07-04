@@ -16,6 +16,9 @@ from user.models import (
 )
 
 
+MAX_FILE_SIZE_MB = 100
+
+
 class CompleteRegistrationSerializer(serializers.Serializer):
     token = serializers.UUIDField()
     password = serializers.CharField(min_length=8, write_only=True)
@@ -67,6 +70,10 @@ class RegistrationApplicationCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "Unsupported file type. Only audio and video files are allowed."
             )
+
+        max_size = MAX_FILE_SIZE_MB * 1024 * 1024
+        if value.size > max_size:
+            raise serializers.ValidationError(f'File size must be under {MAX_FILE_SIZE_MB}MB')
 
         return value
 
