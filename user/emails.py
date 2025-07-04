@@ -1,8 +1,5 @@
-from datetime import timedelta
-
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
-from django.utils import timezone
 
 from gloryphonics import settings
 from user.models import RegistrationApplication, RegistrationToken
@@ -27,7 +24,7 @@ def send_reject_email(application: RegistrationApplication) -> None:
 
 
 def send_approve_email(application: RegistrationApplication, token: str) -> None:
-    link = f"https://frontend-site.com/complete-registration/?token={token}"
+    link = f"http://localhost:5173/registration/?token={token}"
 
     send_mail(
         subject="Your application has been approved",
