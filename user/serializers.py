@@ -73,7 +73,9 @@ class RegistrationApplicationCreateSerializer(serializers.ModelSerializer):
 
         max_size = MAX_FILE_SIZE_MB * 1024 * 1024
         if value.size > max_size:
-            raise serializers.ValidationError(f'File size must be under {MAX_FILE_SIZE_MB}MB')
+            raise serializers.ValidationError(
+                f"File size must be under {MAX_FILE_SIZE_MB}MB"
+            )
 
         return value
 
@@ -176,7 +178,6 @@ class UserListSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = (
             "id",
-            "username",
             "email",
             "avatar",
             "country",
@@ -208,7 +209,6 @@ class CreateUserSerializer(UserListSerializer):
     class Meta:
         model = get_user_model()
         fields = (
-            "username",
             "email",
             "password",
             "country",
@@ -244,7 +244,6 @@ class UserRetrieveSerializer(UserListSerializer):
         model = get_user_model()
         fields = (
             "id",
-            "username",
             "email",
             "avatar",
             "country",

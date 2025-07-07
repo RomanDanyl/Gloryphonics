@@ -103,7 +103,7 @@ class CompleteRegistrationView(APIView):
         token_obj = serializer.validated_data["token_obj"]
 
         user = get_user_model().objects.create_user(
-            username=application.name,
+            username=application.email,
             email=application.email,
             description=application.description,
             country=application.country,
