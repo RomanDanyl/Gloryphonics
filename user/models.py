@@ -150,6 +150,7 @@ class Member(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     pseudonym = models.CharField(max_length=100, blank=True, null=True)
+    role = models.CharField(max_length=255, blank=True, null=True)
     photo = models.ImageField(upload_to=member_photo_upload_path)
 
     def __str__(self):

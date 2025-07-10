@@ -174,7 +174,7 @@ class SocialLinksSerializer(serializers.ModelSerializer):
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
-        fields = ("first_name", "last_name", "pseudonym", "photo")
+        fields = ("first_name", "last_name", "pseudonym", "role", "photo")
 
 
 class UserListSerializer(serializers.ModelSerializer):
