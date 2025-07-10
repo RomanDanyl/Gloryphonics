@@ -14,6 +14,7 @@ from user.utils import (
     user_image_upload_path,
     registration_file_upload_path,
     album_cover_upload_path,
+    member_photo_upload_path,
 )
 
 
@@ -142,3 +143,14 @@ class SocialLinks(models.Model):
 
     def __str__(self):
         return f"Social links for {self.user.username}"
+
+
+class Member(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="members")
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    pseudonym = models.CharField(max_length=100, blank=True, null=True)
+    photo = models.ImageField(upload_to=member_photo_upload_path)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
