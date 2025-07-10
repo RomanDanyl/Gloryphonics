@@ -75,3 +75,27 @@ def album_cover_upload_path(instance: Any, filename: str) -> str:
     ext = pathlib.Path(filename).suffix
     new_filename = f"{title_slug}-{uuid.uuid4()}{ext}"
     return os.path.join("upload", "albums", str(artist_id), new_filename)
+
+
+def member_photo_upload_path(instance: Any, filename: str) -> str:
+    """
+    Generate a file path for member's photo.
+
+    The filename will be constructed from a slugified first_name
+    and last_name attribute of the instance and a unique UUID,
+    preserving the original file extension.
+
+    Args:
+        instance: The model instance containing the member data.
+        filename: The original filename of the uploaded file.
+
+    Returns:
+        A string representing the path where the registration file will be stored.
+    """
+    name = (
+        instance.first_name
+        if instance.first_name
+        else "unknown" + instance.last_name if instance.last_name else "unknown"
+    )
+    filename = f"{slugify(name)}-{uuid.uuid4()}{pathlib.Path(filename).suffix}"
+    return os.path.join("upload", "members_photos", filename)
