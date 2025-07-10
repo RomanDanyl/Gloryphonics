@@ -9,6 +9,7 @@ from user.models import (
     Follower,
     Album,
     SocialLinks,
+    Member,
 )
 
 admin.site.register(UserImage)
@@ -16,6 +17,7 @@ admin.site.register(RegistrationApplication)
 admin.site.register(Follower)
 admin.site.register(Album)
 admin.site.register(SocialLinks)
+admin.site.register(Member)
 
 
 @admin.register(User)

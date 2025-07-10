@@ -192,7 +192,8 @@ class UserListSerializer(serializers.ModelSerializer):
             "country",
             "description",
             "slogan",
-            "members" "social_links",
+            "members",
+            "social_links",
             "albums",
             "followers",
         )
