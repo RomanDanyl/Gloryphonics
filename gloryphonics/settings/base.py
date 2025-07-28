@@ -168,6 +168,6 @@ AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://v0-gloryphonic-1ywfa50pl-mykhailo-hubkos-projects.vercel.app",
-    "https://v0-gloryphonic-mnrnncegv-mykhailo-hubkos-projects.vercel.app/",
+    "https://v0-gloryphonic-mnrnncegv-mykhailo-hubkos-projects.vercel.app",
     "https://gloryphonic-api.ddns.net",
 ]
