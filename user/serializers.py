@@ -196,6 +196,7 @@ class UserListSerializer(serializers.ModelSerializer):
             "social_links",
             "albums",
             "followers",
+            "is_stuff"
         )
 
     def create(self, validated_data: dict) -> get_user_model():
