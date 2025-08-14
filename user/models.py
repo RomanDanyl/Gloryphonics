@@ -55,6 +55,11 @@ class UserManager(DjangoUserManager):
 
 
 class User(AbstractUser):
+    class RoleChoices(models.TextChoices):
+        USER = "User"
+        MANAGER = "Manager"
+        ADMIN = "Admin"
+
     username = None
     email = models.EmailField(_("email address"), unique=True)
     country = models.CharField(max_length=100)
@@ -63,6 +68,9 @@ class User(AbstractUser):
     )
     description = models.TextField(blank=True, null=True)
     slogan = models.TextField(blank=True, null=True)
+    status = models.CharField(
+        choices=RoleChoices.choices, default=RoleChoices.USER, max_length=10
+    )
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = UserManager()
