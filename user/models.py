@@ -68,9 +68,10 @@ class User(AbstractUser):
     )
     description = models.TextField(blank=True, null=True)
     slogan = models.TextField(blank=True, null=True)
-    status = models.CharField(
+    role = models.CharField(
         choices=RoleChoices.choices, default=RoleChoices.USER, max_length=10
     )
+    genres = models.ManyToManyField("Genre", related_name="groups")
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = UserManager()
@@ -124,6 +125,10 @@ class Album(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Genre(models.Model):
+    name = models.CharField(max_length=255)
 
 
 class Follower(models.Model):

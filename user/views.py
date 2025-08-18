@@ -219,7 +219,7 @@ class UserListRetrieveView(viewsets.ReadOnlyModelViewSet):
     queryset = (
         User.objects.all()
         .select_related("social_links")
-        .prefetch_related("albums", "followers")
+        .prefetch_related("albums", "followers", "genres")
     )
 
     def get_serializer_class(self):
