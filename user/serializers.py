@@ -15,6 +15,7 @@ from user.models import (
     SocialLinks,
     RegistrationToken,
     Member,
+    Genre,
 )
 
 
@@ -197,6 +198,8 @@ class UserListSerializer(serializers.ModelSerializer):
             "albums",
             "followers",
             "is_staff",
+            "role",
+            "genres",
         )
 
     def create(self, validated_data: dict) -> get_user_model():
@@ -248,7 +251,14 @@ class UserImageReadSerializer(serializers.ModelSerializer):
         fields = ["id", "user", "image"]
 
 
+class GenreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Genre
+        fields = ["name"]
+
+
 class UserRetrieveSerializer(UserListSerializer):
+    genres = GenreSerializer(many=True, read_only=True)
     images = UserImageReadSerializer(many=True, read_only=True)
 
     class Meta:
@@ -265,6 +275,8 @@ class UserRetrieveSerializer(UserListSerializer):
             "albums",
             "followers",
             "images",
+            "role",
+            "genres",
         )
 
 

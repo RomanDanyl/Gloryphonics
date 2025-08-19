@@ -213,7 +213,12 @@ class UserImageRetrieveDestroyView(generics.RetrieveDestroyAPIView):
         return UserImage.objects.filter(user_id=user_id)
 
 
-class UserListRetrieveView(viewsets.ReadOnlyModelViewSet):
+class UserListRetrieveView(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
     serializer_class = UserListSerializer
     permission_classes = (AllowAny,)
     queryset = (

@@ -173,3 +173,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://gloryphonic-api.ddns.net",
     "https://www.gloryphonic.com",
 ]
+
+
+PAYPAL_CLIENT_ID = os.getenv("PAYPAL_CLIENT_ID")
+PAYPAL_CLIENT_SECRET = os.getenv("PAYPAL_CLIENT_SECRET")
