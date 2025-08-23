@@ -26,7 +26,20 @@ admin.site.register(Genre)
 class UserAdmin(DjangoUserAdmin):
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name", "photo")}),
+        (
+            _("Personal info"),
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "avatar",
+                    "country",
+                    "description",
+                    "slogan",
+                    "genres",
+                )
+            },
+        ),
         (
             _("Permissions"),
             {
@@ -36,6 +49,7 @@ class UserAdmin(DjangoUserAdmin):
                     "is_superuser",
                     "groups",
                     "user_permissions",
+                    "role",
                 )
             },
         ),
