@@ -20,7 +20,7 @@ from user.emails import (
     send_password_reset_email,
 )
 from user.models import RegistrationApplication, UserImage, User, RegistrationToken
-from user.permissions import IsOwnerOrAdminOrReadOnly
+from user.permissions import IsOwnerOrAdminOrReadOnly, IsManagerOrAdminOrReadOnly
 from user.serializers import (
     RegistrationApplicationCreateSerializer,
     RegistrationApplicationReadSerializer,
@@ -220,7 +220,7 @@ class UserListRetrieveUpdateView(
     viewsets.GenericViewSet,
 ):
     serializer_class = UserListSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsManagerOrAdminOrReadOnly,)
     queryset = (
         User.objects.all()
         .select_related("social_links")
