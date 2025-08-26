@@ -213,7 +213,7 @@ class UserImageRetrieveDestroyView(generics.RetrieveDestroyAPIView):
         return UserImage.objects.filter(user_id=user_id)
 
 
-class UserListRetrieveView(
+class UserListRetrieveUpdateView(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
