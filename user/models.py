@@ -15,6 +15,7 @@ from user.utils import (
     registration_file_upload_path,
     album_cover_upload_path,
     member_photo_upload_path,
+    cover_image_upload_path,
 )
 
 
@@ -72,6 +73,9 @@ class User(AbstractUser):
         choices=RoleChoices.choices, default=RoleChoices.USER, max_length=10
     )
     genres = models.ManyToManyField("Genre", related_name="groups")
+    cover_image = models.ImageField(
+        upload_to=cover_image_upload_path, blank=True, null=True
+    )
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = UserManager()

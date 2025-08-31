@@ -99,3 +99,22 @@ def member_photo_upload_path(instance: Any, filename: str) -> str:
     )
     filename = f"{slugify(name)}-{uuid.uuid4()}{pathlib.Path(filename).suffix}"
     return os.path.join("upload", "members_photos", filename)
+
+
+def cover_image_upload_path(instance: Any, filename: str) -> str:
+    """
+    Generate a file path for uploading a user's avatar.
+
+    The filename will be constructed from a slugified username and a unique UUID,
+    preserving the original file extension.
+
+    Args:
+        instance: The model instance containing the user data.
+        filename: The original filename of the uploaded file.
+
+    Returns:
+        A string representing the path where the avatar will be stored.
+    """
+    user_email = instance.email if instance.email else "unknown"
+    filename = f"{slugify(user_email)}-{uuid.uuid4()}{pathlib.Path(filename).suffix}"
+    return os.path.join("upload", "cover_images", filename)
