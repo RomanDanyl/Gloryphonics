@@ -15,7 +15,8 @@ from user.models import (
     SocialLinks,
     RegistrationToken,
     Member,
-    Genre, UserVideo,
+    Genre,
+    UserVideo,
 )
 
 
