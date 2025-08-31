@@ -16,6 +16,7 @@ from user.utils import (
     album_cover_upload_path,
     member_photo_upload_path,
     cover_image_upload_path,
+    user_video_upload_path,
 )
 
 
@@ -87,6 +88,13 @@ class UserImage(models.Model):
 
     def __str__(self) -> str:
         return f"Image from user {self.user.username}"
+
+
+class UserVideo(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="videos")
+    video = models.FileField(
+        upload_to=user_video_upload_path,
+    )
 
 
 class RegistrationToken(models.Model):
