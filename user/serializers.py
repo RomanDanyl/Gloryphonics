@@ -200,6 +200,7 @@ class UserListSerializer(serializers.ModelSerializer):
             "is_staff",
             "role",
             "genres",
+            "cover_image"
         )
 
     def create(self, validated_data: dict) -> get_user_model():
@@ -277,6 +278,7 @@ class UserRetrieveSerializer(UserListSerializer):
             "images",
             "role",
             "genres",
+            "cover_image"
         )
 
 
