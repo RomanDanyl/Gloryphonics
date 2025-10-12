@@ -180,3 +180,13 @@ class Member(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+
+class Comment(models.Model):
+    group = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.text
