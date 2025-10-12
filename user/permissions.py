@@ -27,10 +27,14 @@ class IsManagerOrAdminOrReadOnly(BasePermission):
     def has_object_permission(
         self, request: Request, view: object, obj: object
     ) -> bool:
-        if (
-            request.method in SAFE_METHODS
-            or request.user.is_staff
-            or request.user.role in [User.RoleChoices.ADMIN, User.RoleChoices.MANAGER]
-        ):
+        if request.method in SAFE_METHODS:
             return True
-        return obj.user == request.user
+        elif request.user.is_authenticated:
+            if request.user.is_staff or request.user.role in [
+                User.RoleChoices.ADMIN,
+                User.RoleChoices.MANAGER,
+            ]:
+                return True
+            return obj.user == request.user
+        else:
+            return False
