@@ -17,6 +17,7 @@ from user.models import (
     Member,
     Genre,
     UserVideo,
+    Comment,
 )
 
 
@@ -271,10 +272,17 @@ class GenreSerializer(serializers.ModelSerializer):
         fields = ["name"]
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ["text", "created_at", "user"]
+
+
 class UserRetrieveSerializer(UserListSerializer):
     genres = GenreSerializer(many=True, read_only=True)
     images = UserImageReadSerializer(many=True, read_only=True)
     videos = UserVideoReadSerializer(many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=False)
 
     class Meta:
         model = get_user_model()
@@ -294,6 +302,7 @@ class UserRetrieveSerializer(UserListSerializer):
             "genres",
             "cover_image",
             "videos",
+            "comments",
         )
 
 

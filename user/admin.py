@@ -11,6 +11,7 @@ from user.models import (
     SocialLinks,
     Member,
     Genre,
+    Comment,
 )
 
 admin.site.register(UserImage)
@@ -20,6 +21,7 @@ admin.site.register(Album)
 admin.site.register(SocialLinks)
 admin.site.register(Member)
 admin.site.register(Genre)
+admin.site.register(Comment)
 
 
 @admin.register(User)
