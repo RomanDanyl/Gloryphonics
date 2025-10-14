@@ -12,6 +12,7 @@ from user.models import (
     Member,
     Genre,
     Comment,
+    UserVideo,
 )
 
 admin.site.register(UserImage)
@@ -22,6 +23,31 @@ admin.site.register(SocialLinks)
 admin.site.register(Member)
 admin.site.register(Genre)
 admin.site.register(Comment)
+
+
+class UserImageInline(admin.TabularInline):
+    model = UserImage
+    extra = 1
+
+
+class UserVideoInline(admin.TabularInline):
+    model = UserVideo
+    extra = 1
+
+
+class SocialLinksInline(admin.StackedInline):
+    model = SocialLinks
+    can_delete = True
+
+
+class MemberInline(admin.TabularInline):
+    model = Member
+    extra = 1
+
+
+class AlbumInline(admin.TabularInline):
+    model = Album
+    extra = 1
 
 
 @admin.register(User)
@@ -69,3 +95,10 @@ class UserAdmin(DjangoUserAdmin):
     list_display = ("email", "first_name", "last_name", "is_staff")
     search_fields = ("email", "first_name", "last_name")
     ordering = ("email",)
+    inlines = (
+        MemberInline,
+        AlbumInline,
+        UserImageInline,
+        UserVideoInline,
+        SocialLinksInline,
+    )
