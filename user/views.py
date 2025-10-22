@@ -19,7 +19,13 @@ from user.emails import (
     send_create_email,
     send_password_reset_email,
 )
-from user.models import RegistrationApplication, UserImage, User, RegistrationToken
+from user.models import (
+    RegistrationApplication,
+    UserImage,
+    User,
+    RegistrationToken,
+    Comment,
+)
 from user.permissions import IsOwnerOrAdminOrReadOnly, IsManagerOrAdminOrReadOnly
 from user.serializers import (
     RegistrationApplicationCreateSerializer,
@@ -35,6 +41,7 @@ from user.serializers import (
     PasswordResetRequestResponseSerializer,
     PasswordResetConfirmSerializer,
     PasswordResetConfirmResponseSerializer,
+    CommentSerializer,
 )
 
 
@@ -211,6 +218,27 @@ class UserImageRetrieveDestroyView(generics.RetrieveDestroyAPIView):
     def get_queryset(self):
         user_id = self.kwargs["user_id"]
         return UserImage.objects.filter(user_id=user_id)
+
+    def perform_create(self, serializer):
+        user_id = self.kwargs["user_id"]
+        user = get_object_or_404(User, pk=user_id)
+        serializer.save(group=user)
+
+
+class CommentsListCreateDestroyView(
+    generics.ListCreateAPIView, generics.DestroyAPIView
+):
+    serializer_class = CommentSerializer
+    permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        user_id = self.kwargs["user_id"]
+        return Comment.objects.filter(group__id=user_id).select_related("group")
+
+    def perform_create(self, serializer):
+        user_id = self.kwargs["user_id"]
+        user = get_object_or_404(User, pk=user_id)
+        serializer.save(group=user)
 
 
 class UserListRetrieveUpdateView(

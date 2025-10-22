@@ -11,6 +11,7 @@ from user.views import (
     CompleteRegistrationView,
     PasswordResetRequestView,
     PasswordResetConfirmView,
+    CommentsListCreateDestroyView,
 )
 
 app_name = "user"
@@ -47,5 +48,15 @@ urlpatterns = [
         "password-reset-confirm/",
         PasswordResetConfirmView.as_view(),
         name="password_reset_confirm",
+    ),
+    path(
+        "<int:user_id>/comments/",
+        CommentsListCreateDestroyView.as_view(),
+        name="comments-list-create",
+    ),
+    path(
+        "<int:user_id>/comments/<int:pk>/",
+        CommentsListCreateDestroyView.as_view(),
+        name="comments-destroy",
     ),
 ]

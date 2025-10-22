@@ -273,9 +273,15 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Comment
-        fields = ["text", "created_at", "user"]
+        fields = [
+            "id",
+            "text",
+            "created_at",
+            "user",
+        ]
 
 
 class UserRetrieveSerializer(UserListSerializer):
