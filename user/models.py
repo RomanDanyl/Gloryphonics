@@ -16,7 +16,6 @@ from user.utils import (
     album_cover_upload_path,
     member_photo_upload_path,
     cover_image_upload_path,
-    user_video_upload_path,
 )
 
 
@@ -92,9 +91,7 @@ class UserImage(models.Model):
 
 class UserVideo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="videos")
-    video = models.FileField(
-        upload_to=user_video_upload_path,
-    )
+    playlist = models.URLField()
 
 
 class RegistrationToken(models.Model):
@@ -140,7 +137,7 @@ class Album(models.Model):
 
 
 class Genre(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
@@ -163,11 +160,11 @@ class SocialLinks(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="social_links"
     )
-    facebook = models.URLField(blank=True, null=True)
-    instagram = models.URLField(blank=True, null=True)
-    youtube = models.URLField(blank=True, null=True)
-    spotify = models.URLField(blank=True, null=True)
-    youtube_music = models.URLField(blank=True, null=True)
+    facebook = models.URLField(blank=True, null=True, unique=True)
+    instagram = models.URLField(blank=True, null=True, unique=True)
+    youtube = models.URLField(blank=True, null=True, unique=True)
+    spotify = models.URLField(blank=True, null=True, unique=True)
+    youtube_music = models.URLField(blank=True, null=True, unique=True)
 
     def __str__(self):
         return f"Social links for {self.user.username}"
@@ -177,7 +174,7 @@ class Member(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="members")
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    pseudonym = models.CharField(max_length=100, blank=True, null=True)
+    pseudonym = models.CharField(max_length=100, blank=True, null=True, unique=True)
     role = models.CharField(max_length=255, blank=True, null=True)
     photo = models.ImageField(upload_to=member_photo_upload_path)
 
