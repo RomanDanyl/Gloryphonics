@@ -257,13 +257,13 @@ class UserImageReadSerializer(serializers.ModelSerializer):
 class UserVideoReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserVideo
-        fields = ["id", "user", "video"]
+        fields = ["id", "user", "playlist"]
 
 
 class UserVideoCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserVideo
-        fields = ["user", "video"]
+        fields = ["user", "playlist"]
 
 
 class GenreSerializer(serializers.ModelSerializer):
