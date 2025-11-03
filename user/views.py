@@ -255,6 +255,9 @@ class UserListRetrieveUpdateView(
         .prefetch_related("albums", "followers", "genres")
     )
 
+    def get_queryset(self):
+        return self.queryset.filter(is_superuser=False, is_staff=False)
+
     def get_serializer_class(self):
         if self.action == "retrieve":
             return UserRetrieveSerializer
