@@ -19,66 +19,24 @@ from user.utils import (
 )
 
 
-class UserManager(DjangoUserManager):
-    """Define a model manager for User model with no username field."""
-
-    use_in_migrations = True
-
-    def _create_user(self, email: str, password: str, **extra_fields: Any) -> "User":
-        """Create and save a User with the given email and password."""
-        if not email:
-            raise ValueError("Users must have an email address")
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_user(
-        self, email: str, password: str, **extra_fields: Dict[str, Any]
-    ) -> "User":
-        """Create and save a regular User with the given email and password."""
-        extra_fields.setdefault("is_staff", False)
-        extra_fields.setdefault("is_superuser", False)
-        return self._create_user(email, password, **extra_fields)
-
-    def create_superuser(
-        self, email: str, password: str, **extra_fields: Dict[str, Any]
-    ) -> "User":
-        """Create and save a SuperUser with the given email and password."""
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
-        if extra_fields.get("is_staff") is not True:
-            raise ValueError("Superuser must have is_staff=True.")
-        if extra_fields.get("is_superuser") is not True:
-            raise ValueError("Superuser must have is_superuser=True.")
-        return self._create_user(email, password, **extra_fields)
-
-
 class User(AbstractUser):
     class RoleChoices(models.TextChoices):
-        USER = "User"
-        MANAGER = "Manager"
-        ADMIN = "Admin"
+        USER = "user", "User"
+        MEMBER = "member", "Member"
+        MANAGER = "manager", "Manager"
+        ADMIN = "admin", "Admin"
 
-    username = None
-    email = models.EmailField(_("email address"), unique=True)
-    country = models.CharField(max_length=100)
-    avatar = models.ImageField(
-        upload_to=avatar_upload_path, max_length=355, blank=True, null=True
-    )
-    description = models.TextField(blank=True, null=True)
-    slogan = models.TextField(blank=True, null=True)
     role = models.CharField(
         choices=RoleChoices.choices, default=RoleChoices.USER, max_length=10
     )
-    genres = models.ManyToManyField("Genre", related_name="groups")
-    cover_image = models.ImageField(
-        upload_to=cover_image_upload_path, blank=True, null=True
+    avatar = models.ImageField(upload_to=avatar_upload_path, blank=True, null=True)
+    country = models.CharField(max_length=100)
+    band = models.ForeignKey(
+        "Band", on_delete=models.SET_NULL, null=True, related_name="members"
     )
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
-    objects = UserManager()
+
+    def __str__(self):
+        return self.get_full_name() or self.username
 
 
 class Band(models.Model):

@@ -2,6 +2,7 @@
 
 import user.models
 from django.db import migrations, models
+from django.contrib.auth.models import UserManager
 
 
 class Migration(migrations.Migration):
@@ -14,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterModelManagers(
             name="user",
             managers=[
-                ("objects", user.models.UserManager()),
+                ("objects", UserManager()),
             ],
         ),
         migrations.RemoveField(
