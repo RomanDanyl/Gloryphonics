@@ -81,6 +81,20 @@ class User(AbstractUser):
     objects = UserManager()
 
 
+class Band(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    country = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+    slogan = models.TextField(blank=True, null=True)
+    genres = models.ManyToManyField("Genre", related_name="bands")
+    cover_image = models.ImageField(
+        upload_to=cover_image_upload_path, blank=True, null=True
+    )
+
+    def __str__(self):
+        return self.name
+
+
 class UserImage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="images")
     image = models.ImageField(upload_to=user_image_upload_path)
