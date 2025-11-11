@@ -12,12 +12,14 @@ from user.views import (
     PasswordResetRequestView,
     PasswordResetConfirmView,
     CommentsListCreateDestroyView,
+    BandViewSet,
 )
 
 app_name = "user"
 
 router = DefaultRouter()
 router.register("applications", RegistrationApplicationViewSet, basename="applications")
+router.register("bands", BandViewSet, basename="bands")
 router.register("", UserListRetrieveUpdateView, basename="users")
 
 urlpatterns = [
