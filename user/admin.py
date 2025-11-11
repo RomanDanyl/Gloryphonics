@@ -11,7 +11,7 @@ from user.models import (
     SocialLinks,
     Genre,
     Comment,
-    UserVideo,
+    BandVideo,
 )
 
 admin.site.register(BandImage)
@@ -28,8 +28,8 @@ class BandImageInline(admin.TabularInline):
     extra = 1
 
 
-class UserVideoInline(admin.TabularInline):
-    model = UserVideo
+class BandVideoInline(admin.TabularInline):
+    model = BandVideo
     extra = 1
 
 
@@ -90,6 +90,5 @@ class UserAdmin(DjangoUserAdmin):
     ordering = ("email",)
     inlines = (
         AlbumInline,
-        UserVideoInline,
         SocialLinksInline,
     )

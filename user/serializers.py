@@ -15,7 +15,7 @@ from user.models import (
     SocialLinks,
     RegistrationToken,
     Genre,
-    UserVideo,
+    BandVideo,
     Comment,
 )
 
@@ -246,16 +246,16 @@ class UserImageReadSerializer(serializers.ModelSerializer):
         fields = ["id", "image"]
 
 
-class UserVideoReadSerializer(serializers.ModelSerializer):
+class BandVideoReadSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserVideo
+        model = BandVideo
         fields = ["id", "playlist"]
 
 
-class UserVideoCreateSerializer(serializers.ModelSerializer):
+class BandVideoCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserVideo
-        fields = ["user", "playlist"]
+        model = BandVideo
+        fields = ["band", "playlist"]
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -279,7 +279,6 @@ class CommentSerializer(serializers.ModelSerializer):
 class UserRetrieveSerializer(UserListSerializer):
     genres = GenreSerializer(many=True, read_only=True)
     images = UserImageReadSerializer(many=True, read_only=True)
-    videos = UserVideoReadSerializer(many=True, read_only=True)
     comments = CommentSerializer(many=True, read_only=False)
 
     class Meta:
@@ -299,7 +298,6 @@ class UserRetrieveSerializer(UserListSerializer):
             "role",
             "genres",
             "cover_image",
-            "videos",
             "comments",
         )
 

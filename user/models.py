@@ -61,8 +61,8 @@ class BandImage(models.Model):
         return f"Band's {self.band.name} image #{self.id}"
 
 
-class UserVideo(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="videos")
+class BandVideo(models.Model):
+    band = models.ForeignKey(User, on_delete=models.CASCADE, related_name="videos")
     playlist = models.URLField()
 
 
