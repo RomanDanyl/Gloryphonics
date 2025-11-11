@@ -99,7 +99,7 @@ class RegistrationApplication(models.Model):
 
 
 class Album(models.Model):
-    artist = models.ForeignKey(User, on_delete=models.CASCADE, related_name="albums")
+    band = models.ForeignKey(Band, on_delete=models.CASCADE, related_name="albums")
     title = models.CharField(max_length=255)
     release_date = models.DateField()
     cover_image = models.ImageField(upload_to=album_cover_upload_path)
