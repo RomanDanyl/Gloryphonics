@@ -119,7 +119,7 @@ class Follower(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     followed_artists = models.ManyToManyField(
-        User,
+        Band,
         related_name="followers",
         blank=True,
     )
