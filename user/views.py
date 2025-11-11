@@ -8,7 +8,12 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, mixins, generics, status
-from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
+from rest_framework.permissions import (
+    IsAdminUser,
+    AllowAny,
+    IsAuthenticated,
+    DjangoModelPermissionsOrAnonReadOnly,
+)
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -35,7 +40,7 @@ from user.serializers import (
     UserCreateSerializer,
     UserListSerializer,
     UserImageCreateSerializer,
-    UserImageReadSerializer,
+    BandImageReadSerializer,
     UserRetrieveSerializer,
     CompleteRegistrationSerializer,
     PasswordResetRequestSerializer,
@@ -43,6 +48,7 @@ from user.serializers import (
     PasswordResetConfirmSerializer,
     PasswordResetConfirmResponseSerializer,
     CommentSerializer,
+    BandListSerializer,
 )
 
 
@@ -207,12 +213,12 @@ class BandImageListCreateView(generics.ListCreateAPIView):
 
     def get_serializer_class(self):
         if self.request.method == "GET":
-            return UserImageReadSerializer
+            return BandImageReadSerializer
         return UserImageCreateSerializer
 
 
 class BandImageRetrieveDestroyView(generics.RetrieveDestroyAPIView):
-    serializer_class = UserImageReadSerializer
+    serializer_class = BandImageReadSerializer
     permission_classes = (IsOwnerOrAdminOrReadOnly,)
     lookup_url_kwarg = "image_id"
 
@@ -259,3 +265,26 @@ class UserListRetrieveUpdateView(
         if self.action == "retrieve":
             return UserRetrieveSerializer
         return UserListSerializer
+
+
+class BandViewSet(viewsets.ModelViewSet):
+    serializer_class = BandListSerializer
+    permission_classes = (DjangoModelPermissionsOrAnonReadOnly,)
+    queryset = Band.objects.all().prefetch_related(
+        "genres",
+        "images",
+        "videos",
+        "members",
+        "albums",
+        "followers",
+        "social_links",
+        "comments",
+    )
+
+    # def get_queryset(self):
+    #     return self.queryset.filter(is_superuser=False, is_staff=False)
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return UserRetrieveSerializer
+        return BandListSerializer
