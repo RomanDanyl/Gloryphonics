@@ -14,7 +14,6 @@ from user.models import (
     Follower,
     SocialLinks,
     RegistrationToken,
-    Member,
     Genre,
     UserVideo,
     Comment,
@@ -174,17 +173,10 @@ class SocialLinksSerializer(serializers.ModelSerializer):
         fields = ("facebook", "instagram", "youtube", "spotify", "youtube_music")
 
 
-class MemberSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Member
-        fields = ("first_name", "last_name", "pseudonym", "role", "photo")
-
-
 class UserListSerializer(serializers.ModelSerializer):
     albums = AlbumSerializer(many=True, read_only=True)
     followers = FollowerSerializer(many=True, read_only=True)
     social_links = SocialLinksSerializer(read_only=True)
-    members = MemberSerializer(many=True)
 
     class Meta:
         model = get_user_model()

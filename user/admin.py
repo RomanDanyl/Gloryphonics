@@ -9,7 +9,6 @@ from user.models import (
     Follower,
     Album,
     SocialLinks,
-    Member,
     Genre,
     Comment,
     UserVideo,
@@ -20,7 +19,6 @@ admin.site.register(RegistrationApplication)
 admin.site.register(Follower)
 admin.site.register(Album)
 admin.site.register(SocialLinks)
-admin.site.register(Member)
 admin.site.register(Genre)
 admin.site.register(Comment)
 
@@ -38,11 +36,6 @@ class UserVideoInline(admin.TabularInline):
 class SocialLinksInline(admin.StackedInline):
     model = SocialLinks
     can_delete = True
-
-
-class MemberInline(admin.TabularInline):
-    model = Member
-    extra = 1
 
 
 class AlbumInline(admin.TabularInline):
@@ -96,7 +89,6 @@ class UserAdmin(DjangoUserAdmin):
     search_fields = ("email", "first_name", "last_name")
     ordering = ("email",)
     inlines = (
-        MemberInline,
         AlbumInline,
         UserImageInline,
         UserVideoInline,
