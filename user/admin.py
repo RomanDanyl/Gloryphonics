@@ -12,6 +12,7 @@ from user.models import (
     Genre,
     Comment,
     BandVideo,
+    Band,
 )
 
 admin.site.register(BandImage)
@@ -21,6 +22,7 @@ admin.site.register(Album)
 admin.site.register(SocialLinks)
 admin.site.register(Genre)
 admin.site.register(Comment)
+admin.site.register(Band)
 
 
 class BandImageInline(admin.TabularInline):
