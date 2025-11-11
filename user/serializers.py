@@ -17,6 +17,7 @@ from user.models import (
     Genre,
     BandVideo,
     Comment,
+    Band,
 )
 
 
@@ -229,7 +230,7 @@ class UserImageCreateSerializer(serializers.ModelSerializer):
         fields = ["image"]
 
 
-class UserImageReadSerializer(serializers.ModelSerializer):
+class BandImageReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = BandImage
         fields = ["id", "image"]
@@ -270,6 +271,30 @@ class UserRetrieveSerializer(UserListSerializer):
     class Meta:
         model = get_user_model()
         fields = ("id", "username", "email", "avatar", "country", "role", "band")
+
+
+class BandListSerializer(serializers.ModelSerializer):
+    genres = GenreSerializer(many=True)
+    images = BandImageReadSerializer(many=True)
+    videos = BandVideoReadSerializer(many=True)
+    albums = AlbumSerializer(many=True)
+    followers = FollowerSerializer(many=True)
+
+    class Meta:
+        model = Band
+        fields = (
+            "id",
+            "name",
+            "country",
+            "description",
+            "slogan",
+            "genres",
+            "cover_image",
+            "images",
+            "videos",
+            "albums",
+            "followers",
+        )
 
 
 class AuthTokenSerializer(serializers.Serializer):
