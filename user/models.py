@@ -129,8 +129,8 @@ class Follower(models.Model):
 
 
 class SocialLinks(models.Model):
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="social_links"
+    band = models.OneToOneField(
+        Band, on_delete=models.CASCADE, related_name="social_links"
     )
     facebook = models.URLField(blank=True, null=True, unique=True)
     instagram = models.URLField(blank=True, null=True, unique=True)
@@ -139,7 +139,7 @@ class SocialLinks(models.Model):
     youtube_music = models.URLField(blank=True, null=True, unique=True)
 
     def __str__(self):
-        return f"Social links for {self.user.username}"
+        return f"Social links for {self.band.name}"
 
 
 class Comment(models.Model):
