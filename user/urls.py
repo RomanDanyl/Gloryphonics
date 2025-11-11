@@ -5,8 +5,8 @@ from user.views import (
     RegistrationApplicationViewSet,
     CreateUserView,
     ManageUserView,
-    UserImageListCreateView,
-    UserImageRetrieveDestroyView,
+    BandImageListCreateView,
+    BandImageRetrieveDestroyView,
     UserListRetrieveUpdateView,
     CompleteRegistrationView,
     PasswordResetRequestView,
@@ -25,13 +25,13 @@ urlpatterns = [
     path("", include(router.urls)),
     path("me/", ManageUserView.as_view(), name="manage"),
     path(
-        "<int:user_id>/images/",
-        UserImageListCreateView.as_view(),
+        "<int:band_id>/images/",
+        BandImageListCreateView.as_view(),
         name="user-images-list-create",
     ),
     path(
-        "<int:user_id>/images/<int:image_id>/",
-        UserImageRetrieveDestroyView.as_view(),
+        "<int:band_id>/images/<int:image_id>/",
+        BandImageRetrieveDestroyView.as_view(),
         name="user-image-detail",
     ),
     path(

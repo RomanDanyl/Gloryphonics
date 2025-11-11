@@ -9,7 +9,7 @@ from rest_framework import serializers
 
 from user.models import (
     RegistrationApplication,
-    UserImage,
+    BandImage,
     Album,
     Follower,
     SocialLinks,
@@ -236,13 +236,13 @@ class CreateUserSerializer(UserListSerializer):
 
 class UserImageCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserImage
+        model = BandImage
         fields = ["image"]
 
 
 class UserImageReadSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserImage
+        model = BandImage
         fields = ["id", "image"]
 
 

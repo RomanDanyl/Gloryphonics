@@ -53,12 +53,12 @@ class Band(models.Model):
         return self.name
 
 
-class UserImage(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="images")
+class BandImage(models.Model):
+    band = models.ForeignKey(Band, on_delete=models.CASCADE, related_name="images")
     image = models.ImageField(upload_to=user_image_upload_path)
 
     def __str__(self) -> str:
-        return f"Image from user {self.user.username}"
+        return f"Band's {self.band.name} image #{self.id}"
 
 
 class UserVideo(models.Model):

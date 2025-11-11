@@ -21,10 +21,11 @@ from user.emails import (
 )
 from user.models import (
     RegistrationApplication,
-    UserImage,
+    BandImage,
     User,
     RegistrationToken,
     Comment,
+    Band,
 )
 from user.permissions import IsOwnerOrAdminOrReadOnly, IsManagerOrAdminOrReadOnly
 from user.serializers import (
@@ -191,18 +192,18 @@ class ManageUserView(generics.RetrieveAPIView):
         return self.request.user
 
 
-class UserImageListCreateView(generics.ListCreateAPIView):
+class BandImageListCreateView(generics.ListCreateAPIView):
     serializer_class = UserImageCreateSerializer
     permission_classes = (IsOwnerOrAdminOrReadOnly,)
 
     def get_queryset(self):
-        user_id = self.kwargs["user_id"]
-        return UserImage.objects.filter(user_id=user_id).select_related("user")
+        band_id = self.kwargs["band_id"]
+        return BandImage.objects.filter(band_id=band_id).select_related("user")
 
     def perform_create(self, serializer):
-        user_id = self.kwargs["user_id"]
-        user = get_object_or_404(User, pk=user_id)
-        serializer.save(user=user)
+        band_id = self.kwargs["band_id"]
+        band = get_object_or_404(Band, pk=band_id)
+        serializer.save(band=band)
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -210,19 +211,19 @@ class UserImageListCreateView(generics.ListCreateAPIView):
         return UserImageCreateSerializer
 
 
-class UserImageRetrieveDestroyView(generics.RetrieveDestroyAPIView):
+class BandImageRetrieveDestroyView(generics.RetrieveDestroyAPIView):
     serializer_class = UserImageReadSerializer
     permission_classes = (IsOwnerOrAdminOrReadOnly,)
     lookup_url_kwarg = "image_id"
 
     def get_queryset(self):
-        user_id = self.kwargs["user_id"]
-        return UserImage.objects.filter(user_id=user_id)
+        band_id = self.kwargs["band_id"]
+        return BandImage.objects.filter(band_id=band_id)
 
     def perform_create(self, serializer):
-        user_id = self.kwargs["user_id"]
-        user = get_object_or_404(User, pk=user_id)
-        serializer.save(group=user)
+        band_id = self.kwargs["band_id"]
+        band = get_object_or_404(Band, pk=band_id)
+        serializer.save(group=band)
 
 
 class CommentsListCreateDestroyView(

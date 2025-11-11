@@ -4,7 +4,7 @@ from django.utils.translation import gettext as _
 
 from user.models import (
     User,
-    UserImage,
+    BandImage,
     RegistrationApplication,
     Follower,
     Album,
@@ -14,7 +14,7 @@ from user.models import (
     UserVideo,
 )
 
-admin.site.register(UserImage)
+admin.site.register(BandImage)
 admin.site.register(RegistrationApplication)
 admin.site.register(Follower)
 admin.site.register(Album)
@@ -23,8 +23,8 @@ admin.site.register(Genre)
 admin.site.register(Comment)
 
 
-class UserImageInline(admin.TabularInline):
-    model = UserImage
+class BandImageInline(admin.TabularInline):
+    model = BandImage
     extra = 1
 
 
@@ -90,7 +90,6 @@ class UserAdmin(DjangoUserAdmin):
     ordering = ("email",)
     inlines = (
         AlbumInline,
-        UserImageInline,
         UserVideoInline,
         SocialLinksInline,
     )
