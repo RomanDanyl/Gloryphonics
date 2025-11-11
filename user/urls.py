@@ -18,7 +18,7 @@ app_name = "user"
 
 router = DefaultRouter()
 router.register("applications", RegistrationApplicationViewSet, basename="applications")
-router.register("artists", UserListRetrieveUpdateView, basename="users")
+router.register("", UserListRetrieveUpdateView, basename="users")
 
 urlpatterns = [
     path("register/", CreateUserView.as_view(), name="create-user"),

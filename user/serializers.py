@@ -174,27 +174,17 @@ class SocialLinksSerializer(serializers.ModelSerializer):
 
 
 class UserListSerializer(serializers.ModelSerializer):
-    albums = AlbumSerializer(many=True, read_only=True)
-    followers = FollowerSerializer(many=True, read_only=True)
-    social_links = SocialLinksSerializer(read_only=True)
 
     class Meta:
         model = get_user_model()
         fields = (
             "id",
+            "username",
             "email",
             "avatar",
             "country",
-            "description",
-            "slogan",
-            "members",
-            "social_links",
-            "albums",
-            "followers",
             "is_staff",
             "role",
-            "genres",
-            "cover_image",
         )
 
     def create(self, validated_data: dict) -> get_user_model():
@@ -214,16 +204,15 @@ class UserListSerializer(serializers.ModelSerializer):
         return user
 
 
-class CreateUserSerializer(UserListSerializer):
+class UserCreateSerializer(UserListSerializer):
     class Meta:
         model = get_user_model()
         fields = (
+            "username",
             "email",
             "password",
             "country",
             "avatar",
-            "description",
-            "slogan",
         )
         extra_kwargs = {
             "password": {
@@ -277,29 +266,10 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class UserRetrieveSerializer(UserListSerializer):
-    genres = GenreSerializer(many=True, read_only=True)
-    images = UserImageReadSerializer(many=True, read_only=True)
-    comments = CommentSerializer(many=True, read_only=False)
 
     class Meta:
         model = get_user_model()
-        fields = (
-            "id",
-            "email",
-            "avatar",
-            "country",
-            "description",
-            "slogan",
-            "social_links",
-            "members",
-            "albums",
-            "followers",
-            "images",
-            "role",
-            "genres",
-            "cover_image",
-            "comments",
-        )
+        fields = ("id", "username", "email", "avatar", "country", "role", "band")
 
 
 class AuthTokenSerializer(serializers.Serializer):

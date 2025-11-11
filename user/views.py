@@ -32,7 +32,7 @@ from user.serializers import (
     RegistrationApplicationCreateSerializer,
     RegistrationApplicationReadSerializer,
     RegistrationApplicationUpdateSerializer,
-    CreateUserSerializer,
+    UserCreateSerializer,
     UserListSerializer,
     UserImageCreateSerializer,
     UserImageReadSerializer,
@@ -100,7 +100,7 @@ class RegistrationApplicationViewSet(
 class CompleteRegistrationView(APIView):
     @extend_schema(
         request=CompleteRegistrationSerializer,
-        responses={200: CreateUserSerializer},
+        responses={200: UserCreateSerializer},
     )
     def post(self, request):
         serializer = CompleteRegistrationSerializer(data=request.data)
@@ -119,7 +119,7 @@ class CompleteRegistrationView(APIView):
 
         token_obj.delete()
 
-        return Response(CreateUserSerializer(user).data, status=status.HTTP_201_CREATED)
+        return Response(UserCreateSerializer(user).data, status=status.HTTP_201_CREATED)
 
 
 class PasswordResetRequestView(APIView):
@@ -181,7 +181,7 @@ class PasswordResetConfirmView(APIView):
 
 
 class CreateUserView(generics.CreateAPIView):
-    serializer_class = CreateUserSerializer
+    serializer_class = UserCreateSerializer
 
 
 class ManageUserView(generics.RetrieveAPIView):
@@ -198,7 +198,7 @@ class BandImageListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         band_id = self.kwargs["band_id"]
-        return BandImage.objects.filter(band_id=band_id).select_related("user")
+        return BandImage.objects.get_or_404(band_id=band_id)
 
     def perform_create(self, serializer):
         band_id = self.kwargs["band_id"]
@@ -250,11 +250,7 @@ class UserListRetrieveUpdateView(
 ):
     serializer_class = UserListSerializer
     permission_classes = (IsManagerOrAdminOrReadOnly,)
-    queryset = (
-        User.objects.all()
-        .select_related("social_links")
-        .prefetch_related("albums", "followers", "genres")
-    )
+    queryset = User.objects.all()
 
     def get_queryset(self):
         return self.queryset.filter(is_superuser=False, is_staff=False)
