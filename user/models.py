@@ -32,7 +32,7 @@ class User(AbstractUser):
     avatar = models.ImageField(upload_to=avatar_upload_path, blank=True, null=True)
     country = models.CharField(max_length=100)
     band = models.ForeignKey(
-        "Band", on_delete=models.SET_NULL, null=True, related_name="members"
+        "Band", on_delete=models.SET_NULL, null=True, blank=True, related_name="members"
     )
 
     def __str__(self):
