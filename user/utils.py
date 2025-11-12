@@ -103,7 +103,7 @@ def member_photo_upload_path(instance: Any, filename: str) -> str:
 
 def cover_image_upload_path(instance: Any, filename: str) -> str:
     """
-    Generate a file path for uploading a user's cover image.
+    Generate a file path for uploading a band's cover image.
 
     The filename will be constructed from a slugified user email and a unique UUID,
     preserving the original file extension.
@@ -115,8 +115,8 @@ def cover_image_upload_path(instance: Any, filename: str) -> str:
     Returns:
         A string representing the path where the avatar will be stored.
     """
-    user_email = instance.email if instance.email else "unknown"
-    filename = f"{slugify(user_email)}-{uuid.uuid4()}{pathlib.Path(filename).suffix}"
+    band_name = instance.name
+    filename = f"{slugify(band_name)}-{uuid.uuid4()}{pathlib.Path(filename).suffix}"
     return os.path.join("upload", "cover_images", filename)
 
 
