@@ -1,4 +1,8 @@
+import random
+import string
+
 from django.db import models
+from django.utils.text import slugify
 
 from user.utils import (
     user_image_upload_path,
@@ -19,6 +23,16 @@ class Band(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_slug(self) -> str:
+        """
+        Generate a slug from the band's name and append two random alphanumeric characters.
+        Example: "Red Hot Chili Peppers" -> "red-hot-chili-peppers-x9"
+        """
+        rand_suffix = "".join(
+            random.choices(string.ascii_lowercase + string.digits, k=2)
+        )
+        return f"{slugify(self.name)}-{rand_suffix}"
 
 
 class BandImage(models.Model):

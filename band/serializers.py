@@ -83,12 +83,14 @@ class BandListSerializer(serializers.ModelSerializer):
     videos = BandVideoReadSerializer(many=True)
     albums = AlbumSerializer(many=True)
     followers = FollowerSerializer(many=True)
+    slug = serializers.SerializerMethodField()
 
     class Meta:
         model = Band
         fields = (
             "id",
             "name",
+            "slug",
             "country",
             "description",
             "slogan",
@@ -99,3 +101,6 @@ class BandListSerializer(serializers.ModelSerializer):
             "albums",
             "followers",
         )
+
+    def get_slug(self, obj: Band) -> str:
+        return obj.get_slug()
