@@ -192,7 +192,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "image",
-                    models.ImageField(upload_to=user.utils.user_image_upload_path),
+                    models.ImageField(upload_to=user.utils.band_image_upload_path),
                 ),
                 (
                     "user",

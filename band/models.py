@@ -5,9 +5,9 @@ from django.db import models
 from django.utils.text import slugify
 
 from user.utils import (
-    user_image_upload_path,
     album_cover_upload_path,
     cover_image_upload_path,
+    band_image_upload_path,
 )
 
 
@@ -37,7 +37,7 @@ class Band(models.Model):
 
 class BandImage(models.Model):
     band = models.ForeignKey(Band, on_delete=models.CASCADE, related_name="images")
-    image = models.ImageField(upload_to=user_image_upload_path)
+    image = models.ImageField(upload_to=band_image_upload_path)
 
     def __str__(self) -> str:
         return f"Band's {self.band.name} image #{self.id}"

@@ -25,24 +25,24 @@ def avatar_upload_path(instance: Any, filename: str) -> str:
     return os.path.join("upload", "avatars", filename)
 
 
-def user_image_upload_path(instance: Any, filename: str) -> str:
+def band_image_upload_path(instance: Any, filename: str) -> str:
     """
-    Generate a file path for uploading a user-related image.
+    Generate a file path for uploading a band-related image.
 
-    The filename will be constructed from the user's slugified username and a unique UUID,
-    preserving the original file extension. The path includes the user's ID as a directory.
+    The filename will be constructed from the band's slugified name and a unique UUID,
+    preserving the original file extension. The path includes the band's ID as a directory.
 
     Args:
-        instance: The model instance containing the user image data.
+        instance: The model instance containing the band image data.
         filename: The original filename of the uploaded file.
 
     Returns:
         A string representing the path where the image will be stored.
     """
-    user_id = instance.user.id if instance.user else "unknown"
-    username = instance.user.username if instance.user else "unknown"
-    filename = f"{slugify(username)}-{uuid.uuid4()}{pathlib.Path(filename).suffix}"
-    return os.path.join("upload", "images", str(user_id), filename)
+    band_id = instance.band.id if instance.band else "unknown"
+    band_name = instance.band.name if instance.band else "unknown"
+    filename = f"{slugify(band_name)}-{uuid.uuid4()}{pathlib.Path(filename).suffix}"
+    return os.path.join("upload", "images", str(band_id), filename)
 
 
 def registration_file_upload_path(instance: Any, filename: str) -> str:
