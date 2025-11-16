@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from band.forms import BandAdminForm
 from band.models import (
     BandImage,
     Follower,
@@ -10,6 +11,7 @@ from band.models import (
     BandVideo,
     Band,
 )
+from user.models import User
 
 admin.site.register(BandImage)
 admin.site.register(BandVideo)
@@ -41,8 +43,14 @@ class AlbumInline(admin.TabularInline):
     extra = 1
 
 
+class MembersInline(admin.TabularInline):
+    model = User
+    extra = 1
+
+
 @admin.register(Band)
 class BandAdmin(admin.ModelAdmin):
+    form = BandAdminForm
     list_display = ("name", "country", "description", "slogan", "cover_image")
     search_fields = ("name", "country")
     inlines = [BandImageInline, BandVideoInline, SocialLinksInline]
