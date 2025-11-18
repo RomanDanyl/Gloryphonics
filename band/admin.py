@@ -49,6 +49,6 @@ class MembersInline(admin.TabularInline):
 
 @admin.register(Band)
 class BandAdmin(admin.ModelAdmin):
-    list_display = ("name", "country", "description", "slogan", "cover_image")
+    list_display = ("name", "country",)
     search_fields = ("name", "country")
     inlines = [BandImageInline, BandVideoInline, SocialLinksInline]
