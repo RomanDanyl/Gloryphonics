@@ -173,6 +173,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://v0-gloryphonic-mnrnncegv-mykhailo-hubkos-projects.vercel.app",
     "https://gloryphonic-api.ddns.net",
     "https://www.gloryphonic.com",
+    "https://v0-gloryphonic-mntcg0t9n-mykhailo-hubkos-projects.vercel.app",
 ]
 
 
