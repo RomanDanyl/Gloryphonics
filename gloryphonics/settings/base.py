@@ -176,6 +176,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://v0-gloryphonic-mntcg0t9n-mykhailo-hubkos-projects.vercel.app",
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 PAYPAL_CLIENT_ID = os.getenv("PAYPAL_CLIENT_ID")
 PAYPAL_CLIENT_SECRET = os.getenv("PAYPAL_CLIENT_SECRET")
