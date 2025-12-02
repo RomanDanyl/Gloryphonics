@@ -57,13 +57,13 @@ class CommentsListCreateDestroyView(
     permission_classes = (AllowAny,)
 
     def get_queryset(self):
-        user_id = self.kwargs["user_id"]
-        return Comment.objects.filter(group__id=user_id).select_related("group")
+        band_id = self.kwargs["band_id"]
+        return Comment.objects.filter(group__id=band_id).select_related("group")
 
     def perform_create(self, serializer):
-        user_id = self.kwargs["user_id"]
-        user = get_object_or_404(User, pk=user_id)
-        serializer.save(group=user)
+        band_id = self.kwargs["band_id"]
+        band = get_object_or_404(Band, pk=band_id)
+        serializer.save(group=band)
 
 
 class BandViewSet(viewsets.ModelViewSet):
