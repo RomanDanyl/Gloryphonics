@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from transliterate import detect_language, translit
 
 from user.utils import (
     album_cover_upload_path,
@@ -23,10 +24,12 @@ class Band(models.Model):
 
     def get_slug(self) -> str:
         """
-        Generate a slug from the band's name.
-        Example: "Red Hot Chili Peppers" -> "red-hot-chili-peppers"
+        Generate slug from band name.
+        Auto-detects language (uk/ru/etc) and transliterates Cyrillic → Latin.
         """
-        return f"{slugify(self.name)}"
+        lang = detect_language(self.name)
+        latin = translit(self.name, lang, reversed=True) if lang else self.name
+        return slugify(latin)
 
 
 class BandImage(models.Model):
