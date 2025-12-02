@@ -8,7 +8,7 @@ from band.views import (
     BandViewSet,
 )
 
-app_name = "user"
+app_name = "band"
 
 router = DefaultRouter()
 router.register("", BandViewSet, basename="bands")
@@ -18,15 +18,15 @@ urlpatterns = [
     path(
         "<int:band_id>/images/",
         BandImageListCreateView.as_view(),
-        name="user-images-list-create",
+        name="band-images-list-create",
     ),
     path(
         "<int:band_id>/images/<int:image_id>/",
         BandImageRetrieveDestroyView.as_view(),
-        name="user-image-detail",
+        name="band-image-detail",
     ),
     path(
-        "<int:user_id>/comments/",
+        "<int:band_id>/comments/",
         CommentsListCreateDestroyView.as_view(),
         name="comments-list-create",
     ),
