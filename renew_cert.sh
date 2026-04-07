@@ -1,8 +1,8 @@
 #!/bin/bash
 
-DOMAIN="gloryphonic-api.ddns.net"
+DOMAIN="api.gloryphonic.net"
 CERT_PATH="./certbot/conf/live/$DOMAIN/fullchain.pem"
-DAYS_LEFT=2   # мінімум днів дії, щоб НЕ оновлювати
+DAYS_LEFT=7   # мінімум днів дії, щоб НЕ оновлювати
 
 # Move to the directory where this script is located
 cd "$(dirname "$0")" || {
