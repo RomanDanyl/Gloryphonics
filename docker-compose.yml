@@ -28,8 +28,8 @@ services:
     image: certbot/certbot
     container_name: gloryphonic_certbot
     volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
 
 volumes:
   static_volume:
